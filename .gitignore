@@ -18,6 +18,7 @@ __pycache__/
 venv/
 .venv/
 *.egg-info/
+data/
 
 # --- Environment / secrets ---
 .env
@@ -36,3 +37,4 @@ Thumbs.db
 # --- Ollama / local models cached inside the repo ---
 models/
 *.gguf
+ingestion/retrieval_demo.py
