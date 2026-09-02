@@ -1,0 +1,38 @@
+# --- Node / Frontend ---
+node_modules/
+dist/
+build/
+.vite/
+*.local
+
+# --- .NET / Backend ---
+bin/
+obj/
+*.user
+*.suo
+
+# --- Python / Ingestion ---
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+*.egg-info/
+
+# --- Environment / secrets ---
+.env
+.env.local
+*.env
+
+# --- Docker ---
+*.pid
+
+# --- OS / Editor ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# --- Ollama / local models cached inside the repo ---
+models/
+*.gguf
