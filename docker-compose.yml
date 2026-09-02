@@ -1,0 +1,80 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: rag_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: rag_user
+      POSTGRES_PASSWORD: rag_password
+      POSTGRES_DB: rag_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  ollama:
+    image: ollama/ollama
+    container_name: rag_ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  python-service:
+    build:
+      context: ./ingestion
+      dockerfile: Dockerfile
+    container_name: rag_python
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: rag_db
+      DB_USER: rag_user
+      DB_PASSWORD: rag_password
+      OLLAMA_HOST: http://ollama:11434
+    depends_on:
+      - postgres
+      - ollama
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: rag_backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      PYTHON_SERVICE_URL: http://python-service:8000
+      ConnectionStrings__Default: "Host=postgres;Port=5432;Database=rag_db;Username=rag_user;Password=rag_password"
+    depends_on:
+      - postgres
+      - python-service
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: rag_frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL: http://localhost:5000
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+  ollama_data:
