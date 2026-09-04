@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using RagApp.DataAccess.Context;
 using RagApp.Domain.Entities.Conversation;
@@ -9,11 +10,14 @@ using RagApp.Domain.Models.Message;
 using RagApp.Domain.Models.Service;
 
 namespace RagApp.BusinessLayer.Structure;
-
 public class ConversationActions
 {
     private readonly RagAppDbContext _context;
     private readonly HttpClient _httpClient;
+    private static readonly JsonSerializerOptions CamelCaseOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
 
     public ConversationActions(RagAppDbContext context, HttpClient httpClient)
     {
@@ -133,11 +137,10 @@ public class ConversationActions
             isError = true;
             errorSeverity = "transient";
         }
-        catch (Exception e)
+        catch (Exception)
         {
             // Anything else — service responded with an actual error, or something
             // unexpected happened. Red on the frontend.
-            Console.WriteLine(e);
             answer = "Something went wrong while generating a response.";
             isError = true;
             errorSeverity = "failed";
@@ -149,7 +152,9 @@ public class ConversationActions
             ConversationId = conversation.Id,
             Role = MessageRole.Assistant,
             Content = answer,
-            SourcesJson = sources.Count > 0 ? System.Text.Json.JsonSerializer.Serialize(sources) : null,
+            SourcesJson = sources.Count > 0
+                ? JsonSerializer.Serialize(sources, CamelCaseOptions)
+                : null,
             IsError = isError,
             ErrorSeverity = errorSeverity,
             CreatedAtTimestamp = answerTimestamp
