@@ -10,6 +10,7 @@ bin/
 obj/
 *.user
 *.suo
+appsettings.*
 
 # --- Python / Ingestion ---
 __pycache__/
@@ -35,5 +36,4 @@ Thumbs.db
 .idea/
 
 # --- Ollama / local models cached inside the repo ---
-models/
 *.gguf
