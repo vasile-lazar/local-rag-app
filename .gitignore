@@ -36,5 +36,4 @@ Thumbs.db
 .idea/
 
 # --- Ollama / local models cached inside the repo ---
-models/
 *.gguf
