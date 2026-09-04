@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@layer base {
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        font-family: 'DM Sans', sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+    :root {
+        --bg: #0E0E0E;
+        --bg-card: #181818;
+        --bg-alt: #141414;
+        --text: #F0EDE8;
+        --text-muted: #888480;
+        --border: #2A2826;
+        --accent: #14B8A6;
+        --accent-fg: #0E0E0E;
+    }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+    }
+}
+
+@layer utilities {
+    .bg-theme {
+        background-color: var(--bg);
+    }
+    .bg-theme-card {
+        background-color: var(--bg-card);
+    }
+    .bg-theme-alt {
+        background-color: var(--bg-alt);
+    }
+    .text-theme {
+        color: var(--text);
+    }
+    .text-muted {
+        color: var(--text-muted);
+    }
+    .border-theme {
+        border-color: var(--border);
+    }
+    .accent-bg {
+        background-color: var(--accent);
+    }
+    .accent-text {
+        color: var(--accent);
+    }
+    .accent-border {
+        border-color: var(--accent);
+    }
+    .accent-fg {
+        color: var(--accent-fg);
+    }
+}
+
+/* Card hover */
+.card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.card-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 48px rgba(20, 184, 166, 0.14);
+    border-color: var(--accent) !important;
+}
+
+/* Chat message states */
+.status {
+    @apply px-2 py-1 rounded-xl text-sm font-medium;
+}
+.status-active {
+    @apply bg-green-500/15 text-green-400;
+}
+.status-suspended {
+    @apply bg-red-500/15 text-red-400;
+}
+
+.chat-bubble-error-transient {
+    @apply bg-yellow-500/10 border border-yellow-500/40 text-yellow-500;
+}
+.chat-bubble-error-failed {
+    @apply bg-red-500/10 border border-red-500/40 text-red-400;
+}
