@@ -54,9 +54,11 @@ services:
     container_name: rag_backend
     restart: unless-stopped
     ports:
-      - "5000:5000"
+      - "5134:5134"
     environment:
-      PYTHON_SERVICE_URL: http://python-service:8000
+      JWT_SECRET: ${JWT_SECRET}
+      AUTH_PEPPER: ${AUTH_PEPPER}
+      PythonServiceUrl: http://python-service:8000
       ConnectionStrings__Default: "Host=postgres;Port=5432;Database=rag_db;Username=rag_user;Password=rag_password"
     depends_on:
       - postgres
@@ -71,7 +73,7 @@ services:
     ports:
       - "5173:5173"
     environment:
-      VITE_API_URL: http://localhost:5000
+      VITE_API_URL: http://localhost:5134
     depends_on:
       - backend
 
